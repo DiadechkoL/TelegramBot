@@ -1,0 +1,35 @@
+{
+	"name": "cloudflare-workers-openapi",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"start": "wrangler dev",
+		"cf-typegen": "wrangler types",
+		"test": "jest",
+		"test:watch": "jest --watch",
+		"test:coverage": "jest --coverage"
+	},
+	"dependencies": {
+		"chanfana": "^2.6.3",
+		"dotenv": "^16.4.7",
+		"firebase-admin": "^13.1.0",
+		"hono": "^4.4.7",
+		"itty-router": "^5.0.18",
+		"twilio": "^5.4.3",
+		"zod": "^3.23.8"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20250313.0",
+		"@types/jest": "^29.5.14",
+		"@types/node": "^20.8.3",
+		"@types/node-telegram-bot-api": "^0.64.7",
+		"@types/service-worker-mock": "^2.0.4",
+		"@types/twilio": "^3.19.3",
+		"jest": "^29.7.0",
+		"swagger-jsdoc": "^6.2.8",
+		"ts-jest": "^29.2.6",
+		"wrangler": "^3.106.0"
+	}
+}
