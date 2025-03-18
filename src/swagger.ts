@@ -619,8 +619,8 @@ router.get('/swagger/docs', () => {
 });
 
 // Обработчик всех запросов
-addEventListener('fetch', (event) => {
-  event.respondWith(router.handle(event.request));
-});
+// addEventListener('fetch', (event) => {
+//   event.respondWith(router.handle(event.request));
+// });
 
 export default router;

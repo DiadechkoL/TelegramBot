@@ -1,2 +1,2 @@
-export * from './authorize'
+// export * from './authorize'
 export * from './error-handler'
