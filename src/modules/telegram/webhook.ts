@@ -1,38 +1,51 @@
-import express from 'express';
-import bodyParser from 'body-parser';
+import { Router } from 'itty-router';
+// import { Request } from '@cloudflare/workers-types';
 import axios from 'axios';
 
-const app = express();
-const PORT = 3000;
 const TOKEN = '7852315257:AAEkKj3XHgIkOliNATcj3CDznHis_AQHu_k';
-const WEBHOOK_URL = 'https://phantomsecondline.telegram-project-bot.workers.dev/'; 
+const WEBHOOK_URL = 'https://phantomsecondline.telegram-project-bot.workers.dev/api/bot/webhook';
 
-app.use(bodyParser.json());
+const router = Router();
 
-// Основной обработчик вебхука
-app.post('/webhook', (req, res) => {
-  console.log('Received update:', JSON.stringify(req.body, null, 2));
+// Определяем интерфейс для входящих данных
+interface TelegramUpdate {
+  message?: {
+    chat: {
+      id: number;
+    };
+    text?: string;
+  };
+}
 
-  const update = req.body;
-  if (update.message) {
-    const chatId = update.message.chat.id;
-    const text = update.message.text || 'Нет текста';
+// Обработка вебхука Telegram
+router.post('/api/bot/webhook', async (request) => {
+  try {
+    const body: TelegramUpdate = await request.json();
+    console.log('Received update:', JSON.stringify(body, null, 2));
 
-    // Отправляем ответное сообщение
-    axios.post(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
-      chat_id: chatId,
-      text: `Вы сказали: ${text}`
-    }).catch(err => console.error('Ошибка отправки сообщения:', err));
+    if (body.message) {
+      const chatId = body.message.chat.id;
+      const text = body.message.text || 'Нет текста';
+
+      // Отправляем ответное сообщение
+      await axios.post(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+        chat_id: chatId,
+        text: `Вы сказали: ${text}`,
+      });
+    }
+
+    return new Response('OK', { status: 200 });
+  } catch (error) {
+    console.error('Ошибка обработки вебхука:', error);
+    return new Response('Bad Request', { status: 400 });
   }
-
-  res.sendStatus(200);
 });
 
-// Функция для установки вебхука
+// Устанавливаем вебхук при запуске Cloudflare Workers
 async function setWebhook() {
   try {
     const response = await axios.post(`https://api.telegram.org/bot${TOKEN}/setWebhook`, {
-      url: WEBHOOK_URL
+      url: WEBHOOK_URL,
     });
     console.log('Webhook установлен:', response.data);
   } catch (error) {
@@ -40,8 +53,10 @@ async function setWebhook() {
   }
 }
 
-// Запускаем сервер
-app.listen(PORT, async () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-  await setWebhook(); // Устанавливаем вебхук при запуске сервера
-});
+export default {
+  async fetch(request, env, ctx) {
+    return router.handle(request) || new Response('Not Found', { status: 404 });
+  },
+};
+
+setWebhook();

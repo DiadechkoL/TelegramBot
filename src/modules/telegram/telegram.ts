@@ -21,25 +21,29 @@ router.all('*', async (request: Request) => {
 
 // Обработка сообщений от Telegram
 router.post('/api/bot/webhook', async (request: Request) => {
-  try {
-    const body: TelegramMessage = await request.json();
-    console.log("Request body:", body);
-
-    if (body.message) {
-      const chatId = body.message.chat.id;
-      const text = body.message.text || '';
-      console.log(`Received message from chat ${chatId}: ${text}`);
+    try {
+      const body: any = await request.json();
+      console.log("Request body:", body);
+  
+      if (body.message) {
+        const chatId = body.message.chat.id;
+        const text = body.message.text || '';
+        console.log(`Received message from chat ${chatId}: ${text}`);
+      } else {
+        console.log("Received non-message update:", body);
+      }
+  
+      return new Response('OK', { status: 200 });
+    } catch (error) {
+      console.error('Error processing webhook:', error);
+      return new Response('Bad Request', { status: 400 });
     }
-
-    return new Response('OK', { status: 200 });
-  } catch (error) {
-    console.error('Error processing webhook:', error);
-    return new Response('Bad Request', { status: 400 });
-  }
-});
+  });
+  
 
 export default {
-  async fetch(request: Request, env: any, ctx: ExecutionContext) {
-    return router.handle(request, env, ctx);
-  }
-};
+    async fetch(request: Request, env: any, ctx: ExecutionContext) {
+      return router.handle(request, env, ctx) || new Response('Not Found', { status: 404 });
+    }
+  };
+  
