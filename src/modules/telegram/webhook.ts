@@ -1,26 +1,28 @@
 import { Router } from 'itty-router';
 // import { Request } from '@cloudflare/workers-types';
 import axios from 'axios';
+import { Message, User, Chat } from "node-telegram-bot-api";
+
 
 const TOKEN = '7852315257:AAEkKj3XHgIkOliNATcj3CDznHis_AQHu_k';
 const WEBHOOK_URL = 'https://phantomsecondline.telegram-project-bot.workers.dev/api/bot/webhook';
 
 const router = Router();
 
-// Определяем интерфейс для входящих данных
-interface TelegramUpdate {
-  message?: {
-    chat: {
-      id: number;
-    };
-    text?: string;
-  };
+interface TelegramMessage {
+    message?: Message;
+    message_id: number;
+    message_thread_id?: number | undefined;
+    from?: User | undefined;
+    date: number;
+    chat: Chat;
 }
+
 
 // Обработка вебхука Telegram
 router.post('/api/bot/webhook', async (request) => {
   try {
-    const body: TelegramUpdate = await request.json();
+    const body: TelegramMessage = await request.json();
     console.log('Received update:', JSON.stringify(body, null, 2));
 
     if (body.message) {
