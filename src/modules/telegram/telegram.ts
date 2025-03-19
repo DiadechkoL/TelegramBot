@@ -1,29 +1,34 @@
 import { Router } from 'itty-router';
 import { Request } from '@cloudflare/workers-types';
-import {  Message, User, Chat } from "node-telegram-bot-api";
-
+import { Message, User, Chat } from "node-telegram-bot-api";
 
 interface TelegramMessage {
-    message?:Message ;
+    message?: Message;
     message_id: number;
     message_thread_id?: number | undefined;
     from?: User | undefined;
     date: number;
-    chat: Chat;}
+    chat: Chat;
+}
 
 const router = Router();
 
-// обработка сообщений от тг
+// Логирование всех запросов
+router.all('*', async (request: Request) => {
+  console.log("Incoming request:", request.method, request.url);
+  return new Response('Not Found', { status: 404 });
+});
+
+// Обработка сообщений от Telegram
 router.post('/api/bot/webhook', async (request: Request) => {
   try {
     const body: TelegramMessage = await request.json();
+    console.log("Request body:", body);
 
     if (body.message) {
       const chatId = body.message.chat.id;
       const text = body.message.text || '';
       console.log(`Received message from chat ${chatId}: ${text}`);
-      
-      
     }
 
     return new Response('OK', { status: 200 });
@@ -34,5 +39,7 @@ router.post('/api/bot/webhook', async (request: Request) => {
 });
 
 export default {
-  fetch: router.handle,
+  async fetch(request: Request, env: any, ctx: ExecutionContext) {
+    return router.handle(request, env, ctx);
+  }
 };
