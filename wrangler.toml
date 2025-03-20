@@ -1,12 +1,12 @@
-name = "phantomsecondline"
+name = "telegranbot"
 main="src/index.ts"
 compatibility_date = "2024-11-06"
 compatibility_flags = ["nodejs_compat"]
 
 [[d1_databases]]
 binding = "DB"
-database_name = "phantomsecondline"
-database_id = "c863cc1b-dc9a-401c-82ee-c040241b1e67"
+database_name = "telegrambot"
+database_id = "fb1d85b0-40c9-48f5-88d8-7dd8c832b8a9"
 preview_database_id = "test"
 migrations_dir = "migrations"
 
