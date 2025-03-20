@@ -20,7 +20,7 @@ router.all('*', async (request: Request) => {
 });
 
 // Обработка сообщений от Telegram
-router.post('/api/bot/webhook', async (request: Request) => {
+router.post('/api/update', async (request: Request) => {
     try {
       const body: TelegramMessage = await request.json();
       console.log("Request body:", body);

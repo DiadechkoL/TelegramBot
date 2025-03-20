@@ -9,30 +9,13 @@ const WEBHOOK_URL = 'https://phantomsecondline.telegram-project-bot.workers.dev/
 
 const router = Router();
 
-interface TelegramMessage {
-    message?: Message;
-    message_id: number;
-    message_thread_id?: number | undefined;
-    from?: User | undefined;
-    date: number;
-    chat: Chat;
-}
 
 
-router.post('/api/bot/webhook', async (request) => {
+
+router.get('/api/bot/webhook', async () => {
   try {
-    const body: TelegramMessage = await request.json();
-    console.log('Received update:', JSON.stringify(body, null, 2));
-
-    if (body.message) {
-      const chatId = body.message.chat.id;
-      const text = body.message.text || 'Нет текста';
-
-      await axios.post(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
-        chat_id: chatId,
-        text: `Вы сказали: ${text}`,
-      });
-    }
+    setWebhook();
+    
 
     return new Response('OK', { status: 200 });
   } catch (error) {
