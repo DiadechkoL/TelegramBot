@@ -41,9 +41,10 @@ router.post('/api/bot/webhook', async (request: Request) => {
   });
   
 
-export default {
-    async fetch(request: Request, env: any, ctx: ExecutionContext) {
-      return router.handle(request, env, ctx) || new Response('Not Found', { status: 404 });
-    }
+  export default {
+    async fetch(request, env, ctx) {
+      return await router.handle(request) || new Response('Not Found', { status: 404 });
+    },
   };
+  
   
