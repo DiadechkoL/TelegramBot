@@ -9,9 +9,6 @@ const WEBHOOK_URL = 'https://telegranbot.telegram-project-bot.workers.dev/';
 
 const router = Router();
 
-
-
-
 router.get('/api/bot/webhook', async () => {
   try {
     setWebhook();
