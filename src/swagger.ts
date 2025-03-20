@@ -619,8 +619,9 @@ router.get('/swagger/docs', () => {
 });
 
 // Обработчик всех запросов
-// addEventListener('fetch', (event) => {
-//   event.respondWith(router.handle(event.request));
-// });
+// @ts-ignore: Suppress TypeScript error for 'respondWith' on 'event'
+addEventListener('fetch', (event: FetchEvent) => {
+  event.respondWith(router.handle(event.request));
+});
 
 export default router;

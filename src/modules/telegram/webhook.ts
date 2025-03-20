@@ -19,7 +19,6 @@ interface TelegramMessage {
 }
 
 
-// Обработка вебхука Telegram
 router.post('/api/bot/webhook', async (request) => {
   try {
     const body: TelegramMessage = await request.json();
@@ -29,7 +28,6 @@ router.post('/api/bot/webhook', async (request) => {
       const chatId = body.message.chat.id;
       const text = body.message.text || 'Нет текста';
 
-      // Отправляем ответное сообщение
       await axios.post(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
         chat_id: chatId,
         text: `Вы сказали: ${text}`,
@@ -43,7 +41,7 @@ router.post('/api/bot/webhook', async (request) => {
   }
 });
 
-// Устанавливаем вебхук при запуске Cloudflare Workers
+
 async function setWebhook() {
   try {
     const response = await axios.post(`https://api.telegram.org/bot${TOKEN}/setWebhook`, {
