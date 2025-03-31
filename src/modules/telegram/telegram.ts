@@ -1,7 +1,7 @@
 import { Router } from 'itty-router';
 import { Request } from '@cloudflare/workers-types';
 import { Message, User, Chat } from "node-telegram-bot-api";
-import axios from 'axios';
+// import axios from 'axios';
 
 
 interface TelegramMessage {
@@ -46,23 +46,25 @@ router.post('/api/update', async (request: Request) => {
 
   router.get('/api/bot/webhook', async () => {
     try {
-      setWebhook();
-      
-  
-      return new Response('OK', { status: 200 });
+        await setWebhook(); // <-- Добавили await
+        return new Response('OK', { status: 200 });
     } catch (error) {
-      console.error('Ошибка обработки вебхука:', error);
-      return new Response('Bad Request', { status: 400 });
+        console.error('Ошибка обработки вебхука:', error);
+        return new Response('Bad Request', { status: 400 });
     }
-  });
+});
+
   
   
   async function setWebhook() {
     try {
-      const response = await axios.post(`https://api.telegram.org/bot${TOKEN}/setWebhook`, {
-        url: WEBHOOK_URL,
-      });
-      console.log('Webhook установлен:', response.data);
+      const response = await fetch(`https://api.telegram.org/bot${TOKEN}/setWebhook`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: WEBHOOK_URL }),
+    });
+    const data = await response.json();
+      console.log('Webhook установлен:', data);
     } catch (error) {
       console.error('Ошибка установки вебхука:', error);
     }
