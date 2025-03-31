@@ -5,6 +5,7 @@ import { Router } from 'itty-router'
 // import callRouter from '@/modules/call/call.router'
 import swaggerRouter from '@/swagger'
 import { errorHandler } from "@/common/middleware/error-handler"
+import telegramRouter from '@/modules/telegram/telegram'
 
 // import {TwilioService} from '@/common/services/twilio.service'
 
@@ -25,6 +26,7 @@ router.get('/balance', async () => {
 // router.all('/api/user/*', userRouter.fetch);
 // router.all('/api/sms/*', smsRouter.fetch);
 // router.all('/api/call/*', callRouter.fetch);
+router.all('/api/telegram/*', telegramRouter.fetch);
 router.all('/swagger/*', swaggerRouter.fetch);
 router.all('*', ()=> {
     return new Response(
