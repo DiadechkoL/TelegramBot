@@ -11,14 +11,15 @@ const router = Router();
 
 router.get('/api/bot/webhook', async () => {
   try {
-      await setWebhook(); // <-- Добавили await
-      return new Response('OK', { status: 200 });
+    setWebhook();
+    
+
+    return new Response('OK', { status: 200 });
   } catch (error) {
-      console.error('Ошибка обработки вебхука:', error);
-      return new Response('Bad Request', { status: 400 });
+    console.error('Ошибка обработки вебхука:', error);
+    return new Response('Bad Request', { status: 400 });
   }
 });
-
 
 
 async function setWebhook() {
