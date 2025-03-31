@@ -17,11 +17,11 @@ const WEBHOOK_URL = 'https://telegranbot.telegram-project-bot.workers.dev/';
 
 const router = Router();
 
-// Логирование всех запросов
-router.all('*', async (request: Request) => {
-  console.log("Incoming request:", request.method, request.url);
-  return new Response('Not Found', { status: 404 });
-});
+// // Логирование всех запросов
+// router.all('*', async (request: Request) => {
+//   console.log("Incoming request:", request.method, request.url);
+//   return new Response('Not Found', { status: 404 });
+// });
 
 // Обработка сообщений от Telegram
 router.post('/api/update', async (request: Request) => {
