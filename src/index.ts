@@ -5,7 +5,7 @@ import { Router } from 'itty-router'
 // import callRouter from '@/modules/call/call.router'
 import swaggerRouter from '@/swagger'
 import { errorHandler } from "@/common/middleware/error-handler"
-import telegramRouter from '@/modules/telegram/telegram'
+import telegramRouter from '@/modules/telegram/telegram.router'
 
 // import {TwilioService} from '@/common/services/twilio.service'
 
